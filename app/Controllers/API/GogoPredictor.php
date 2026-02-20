@@ -13,10 +13,6 @@ class GogoPredictor extends Controller
         $json = $this->request->getJSON(true);
         $enemies = $json['enemies'] ?? null;
 
-        if (!$enemies || count($enemies) !== 7) {
-            return $this->failValidationError('Harus 7 lawan');
-        }
-
         $model = new PredictorModel();
         $result = $model->calculatePrediction($enemies);
 
