@@ -58,60 +58,74 @@ async function calculate() {
 
     result.textContent = 'Memproses...';
 
-    try {
-        const res = await fetch('/public/api/predict', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ enemies })
-        });
+    // LOGIKA PREDIKSI (dari PredictorModel.php)
+    setTimeout(() => {
+        try {
+            // Ini adalah implementasi dari logic di PredictorModel.php
+            // return [
+            //     'rounds' => $e,
+            //     'next' => [
+            //         $e[1],
+            //         $e[4],
+            //         $e[3],
+            //     ]
+            // ];
 
-        const data = await res.json();
+            const rounds = enemies;
+            const next = [
+                rounds[1],  // indeks ke-1 (elemen ke-2)
+                rounds[4],  // indeks ke-4 (elemen ke-5)
+                rounds[3]   // indeks ke-3 (elemen ke-4)
+            ];
 
-        if (!data.data) {
-            result.textContent = 'Terjadi kesalahan server';
-            return;
+            let output = '';
+
+            // Tampilkan ronde 1-7 (sesuai input)
+            output += '🎯 RONDE 1-7:\n';
+            rounds.forEach((name, index) => {
+                output += `Ronde ${index + 1}: ${name}\n`;
+            });
+
+            // Tampilkan prediksi selanjutnya
+            output += '\n🔮 PREDIKSI RONDE SELANJUTNYA:\n';
+            const nextRounds = ['Ronde 8', 'Ronde 9', 'Ronde 10'];
+            next.forEach((name, index) => {
+                if (name) {
+                    output += `${nextRounds[index]}: ${name}\n`;
+                } else {
+                    output += `${nextRounds[index]}: (data tidak tersedia)\n`;
+                }
+            });
+
+            result.textContent = output;
+
+        } catch (e) {
+            result.textContent = 'Gagal memproses data';
+            console.error(e);
         }
-
-        let output = '';
-
-        // Ronde 1–7 (sesuai input)
-        data.data.rounds.forEach(name => {
-            output += name + '\n';
-        });
-
-        // Prediksi selanjutnya
-        data.data.next.forEach(name => {
-            output += name + '\n';
-        });
-
-        result.textContent = output.trim();
-
-    } catch (e) {
-        result.textContent = 'Gagal menghubungi server';
-    }
+    })
 }
+
 
 /* ======================
    RESET
 ====================== */
 function resetAll() {
-    enemies.length = 0;
-    enemyInput.value = '';
-    enemyList.innerHTML = '';
-    result.textContent = 'Menunggu input...';
-    updateCounter();
-}
+            enemies.length = 0;
+            enemyInput.value = '';
+            enemyList.innerHTML = '';
+            result.textContent = 'Menunggu input...';
+            updateCounter();
+        }
 
 /* ======================
    ENTER KEY SUPPORT
 ====================== */
 enemyInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        addEnemy();
-    }
-});
+            if (e.key === 'Enter') {
+                addEnemy();
+            }
+        });
 
-/* INIT */
-updateCounter();
+    /* INIT */
+    updateCounter();

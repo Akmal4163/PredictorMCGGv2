@@ -10,11 +10,11 @@ class GogoPredictor extends Controller
 
     public function predict()
     {
-        $json = $this->request->getJSON(true);
-        $enemies = $json['enemies'] ?? null;
+        $enemies = $this->request->getPost('enemies');
 
         $model = new PredictorModel();
         $result = $model->calculatePrediction($enemies);
+
 
         return $this->respond([
             'status' => 200,
